@@ -1,0 +1,152 @@
+﻿<Window x:Class="SniffLogFW.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SniffLogFW"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        mc:Ignorable="d"
+        Title="SniffLog"
+        Height="768" Width="1024" WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded" Icon="/dog.png">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ComboBox Grid.Row="0" Grid.Column="0" Margin="5" MinWidth="128" Name="portCombo"
+                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                  materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource SecondaryHueMidBrush}"
+                  materialDesign:ColorZoneAssist.Mode="Inverted"
+                  materialDesign:HintAssist.Hint="COM Port"/>
+        <ComboBox Grid.Row="1" Grid.Column="0" Margin="5" MinWidth="128" Name="baudCombo"
+                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                  materialDesign:TextFieldAssist.SuffixText="bps"
+                  materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource SecondaryHueMidBrush}"
+                  materialDesign:ColorZoneAssist.Mode="Inverted"
+                  materialDesign:HintAssist.Hint="Baudrate">
+            <ComboBoxItem>1200</ComboBoxItem>
+            <ComboBoxItem>4800</ComboBoxItem>
+            <ComboBoxItem>9600</ComboBoxItem>
+            <ComboBoxItem>19200</ComboBoxItem>
+            <ComboBoxItem>38400</ComboBoxItem>
+            <ComboBoxItem>115200</ComboBoxItem>
+        </ComboBox>
+        <ComboBox Grid.Row="2" Grid.Column="0" Margin="5" MinWidth="128" Name="dataCombo"
+                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                  materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource SecondaryHueMidBrush}"
+                  materialDesign:ColorZoneAssist.Mode="Inverted"
+                  materialDesign:HintAssist.Hint="Data bits">
+            <ComboBoxItem>7</ComboBoxItem>
+            <ComboBoxItem>8</ComboBoxItem>
+        </ComboBox>
+        <ComboBox Grid.Row="3" Grid.Column="0" Margin="5" MinWidth="128" Name="stopCombo"
+                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                  materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource SecondaryHueMidBrush}"
+                  materialDesign:ColorZoneAssist.Mode="Inverted"
+                  materialDesign:HintAssist.Hint="Stop bits">
+            <ComboBoxItem>1</ComboBoxItem>
+            <ComboBoxItem>2</ComboBoxItem>
+        </ComboBox>
+        <ComboBox Grid.Row="4" Grid.Column="0" Margin="5" MinWidth="128" Name="parityCombo"
+                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                  materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource SecondaryHueMidBrush}"
+                  materialDesign:ColorZoneAssist.Mode="Inverted"
+                  materialDesign:HintAssist.Hint="Parity">
+            <ComboBoxItem>None</ComboBoxItem>
+            <ComboBoxItem>Odd</ComboBoxItem>
+            <ComboBoxItem>Even</ComboBoxItem>
+        </ComboBox>
+
+        <Button Grid.Row="5" Grid.Column="0" Margin="5" Click="Connect_Click"
+                IsEnabled="{Binding IsDisconnected, Mode=TwoWay}">Connect</Button>
+        <Button Grid.Row="6" Grid.Column="0" Margin="5" Click="Disconnect_Click"
+                IsEnabled="{Binding IsConnected, Mode=TwoWay}">Disconnect</Button>
+        <Button Grid.Row="7" Grid.Column="0" Margin="5" Click="Save_Click">Save</Button>
+        <Grid Grid.Row="8" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Margin="5" Click="Refresh_Click"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                    ToolTip="Clear Log" Cursor="Hand">
+                <materialDesign:PackIcon Kind="Refresh"/>
+            </Button>
+            <ToggleButton Grid.Column="2" Margin="5" IsChecked="{Binding Translate, Mode=TwoWay}"
+                    Width="40" Height="40"
+                    Style="{StaticResource MaterialDesignActionToggleButton}"                    
+                    ToolTip="Translation">
+                <ToggleButton.Content>
+                    <materialDesign:PackIcon Kind="AlphabeticalVariantOff" />
+                </ToggleButton.Content>
+                <materialDesign:ToggleButtonAssist.OnContent>
+                    <materialDesign:PackIcon Kind="AlphabeticalVariant" />
+                </materialDesign:ToggleButtonAssist.OnContent>
+            </ToggleButton>
+            <ToggleButton Grid.Column="1" Margin="5" IsChecked="{Binding Pause, Mode=TwoWay}"
+                    Width="40" Height="40"
+                    Style="{StaticResource MaterialDesignActionToggleButton}"                    
+                    ToolTip="Pause/Play" Cursor="Hand">
+                <ToggleButton.Content>
+                    <materialDesign:PackIcon Kind="Pause" />
+                </ToggleButton.Content>
+                <materialDesign:ToggleButtonAssist.OnContent>
+                    <materialDesign:PackIcon Kind="Play" />
+                </materialDesign:ToggleButtonAssist.OnContent>
+            </ToggleButton>
+            <ToggleButton Grid.Column="3" Margin="5" IsChecked="{Binding Isolate, Mode=TwoWay}"
+                    Width="40" Height="40"
+                    Style="{StaticResource MaterialDesignActionToggleButton}"                    
+                    ToolTip="Print only caught messages" Cursor="Hand">
+                <ToggleButton.Content>
+                    <materialDesign:PackIcon Kind="Marker" />
+                </ToggleButton.Content>
+                <materialDesign:ToggleButtonAssist.OnContent>
+                    <materialDesign:PackIcon Kind="MarkerCancel" />
+                </materialDesign:ToggleButtonAssist.OnContent>
+            </ToggleButton>
+        </Grid>
+
+        <TextBox Grid.Row="9" Grid.Column="0" 
+                 Name="slaveCatchText" Margin="5"
+                 materialDesign:HintAssist.Hint="Catch Slave"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                 VerticalAlignment="Center" TextChanged="SlaveCatch_TextChanged"/>
+
+        <TextBox Grid.Row="10" Grid.Column="0"
+                 Name="functionCatchText" Margin="5"
+                 materialDesign:HintAssist.Hint="Catch Function"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                 VerticalAlignment="Top" TextChanged="FunctionCatch_TextChanged" />
+
+        <ScrollViewer Grid.Row="0" Grid.Column="1" Grid.RowSpan="12" Margin="5"
+                      VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <ListBox Name="logBox" FontSize="10" FontFamily="Lucida Console"/>
+        </ScrollViewer>
+    </Grid>
+</Window>
