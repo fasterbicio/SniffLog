@@ -17,3 +17,6 @@ The highlight button toggles isolation of the only catch PDUs.
 ![Immagine 2023-07-29 081803](https://github.com/fasterbicio/SniffLog/assets/58078642/9f0c5e5c-74fa-488a-b3f4-9317b5061563)
 
 Both catch Slave address and catch Function Code are in decimal notaion.
+
+# Requirements
+SniffLog runs in .NET framework 4.8.1.
